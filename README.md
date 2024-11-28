@@ -314,3 +314,4 @@ The deployment script manages these processes automatically while maintaining ve
 ## License
 MIT License - see LICENSE file for details
 
+# wp-automation-tool
