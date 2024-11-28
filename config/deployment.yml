@@ -1,0 +1,17 @@
+# config/deployment.yml
+environment:
+  production:
+    host: your-production-server
+    wordpress_url: https://your-wordpress-site.com
+    api_rate_limits:
+      openai: 20  # requests per minute
+      unsplash: 30
+      wordpress: 15
+  
+  staging:
+    host: your-staging-server
+    wordpress_url: https://staging.your-wordpress-site.com
+    api_rate_limits:
+      openai: 10
+      unsplash: 20
+      wordpress: 10

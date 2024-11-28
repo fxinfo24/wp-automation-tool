@@ -1,0 +1,129 @@
+# Configuration and Secrets
+config/config.ini
+config/.key
+.env
+*.pem
+*.key
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.env/
+.venv/
+pythonenv*/
+
+# IDE and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+*.sublime-workspace
+*.sublime-project
+.spyderproject
+.ropeproject
+
+# Project specific
+data/content_cache/
+data/image_cache/
+data/post_history/
+data/media/
+logs/*.log
+version_control/*
+!version_control/.gitkeep
+*.cache
+*.log.*
+automation_*.log
+wordpress_automation_*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+*.temp
+~$*
+
+# Testing and Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+coverage/
+
+# Distribution and Packaging
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+dist/
+build/
+*.egg
+*.egg-info/
+
+# Documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+*.pdf
+*.doc
+*.docx
+
+# Logs and Databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+# Keep these files
+!.gitkeep
+!config/config.example.ini
+!README.md
+!requirements.txt
+!setup.py
+!pytest.ini
+!.env.example
+
+# OS Generated
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+*.swp
+._*
+.Spotlight-V100
+.Trashes
