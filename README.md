@@ -34,6 +34,55 @@ An advanced Python automation tool for creating and publishing high-quality cont
 
 ## Installation Guide
 
+## Quick Start
+
+### Prerequisites
+```bash
+# System Requirements
+Python 3.12
+VS Code + Python extensions
+WordPress site with XML-RPC
+```
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/fxinfo24/wp-automation-tool.git
+cd wordpress_automation_tool
+
+# Set up environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Configuration
+1. Copy example configuration:
+```bash
+cp config/config.example.ini config/config.ini
+```
+
+2. Add your API credentials:
+```ini
+[openai]
+api_key = your_openai_key
+model = gpt-4
+
+[wordpress]
+url = https://your-site.com/xmlrpc.php
+username = your_username
+password = your_app_password
+```
+
+### Basic Usage
+```bash
+# Run with default configuration
+python main.py --input data/topics.csv
+
+# Run with custom config
+python main.py --input data/topics.csv --config config/custom_config.ini
+```
+
 ### Prerequisites
 - Python 3.12
 - VS Code with Python extensions

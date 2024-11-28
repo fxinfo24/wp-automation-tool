@@ -5,6 +5,7 @@ config/.key
 *.pem
 *.key
 credentials.json
+config/config_backup.ini
 
 # Python
 __pycache__/

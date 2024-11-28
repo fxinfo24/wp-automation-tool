@@ -43,7 +43,7 @@ WordPress site with XML-RPC
 ### Installation
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/wordpress-automation-tool.git
+git clone https://github.com/fxinfo24/wp-automation-tool.git
 cd wordpress_automation_tool
 
 # Set up environment
