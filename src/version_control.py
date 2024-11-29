@@ -7,36 +7,46 @@ Created on Mon Nov 25 02:57:12 2024
 """
 
 # src/version_control.py
-from datetime import datetime
+
+from pathlib import Path
 import json
+from datetime import datetime
+import logging
 
 class VersionControl:
-    def __init__(self):
-        self.version = "1.0.0"
-        self.version_history = []
-        
-    def increment_version(self, version_type='patch'):
-        major, minor, patch = map(int, self.version.split('.'))
-        if version_type == 'major':
-            major += 1
-            minor = patch = 0
-        elif version_type == 'minor':
-            minor += 1
-            patch = 0
-        else:
-            patch += 1
-        self.version = f"{major}.{minor}.{patch}"
-        
-    def log_change(self, change_type, description):
-        change = {
-            'version': self.version,
-            'timestamp': datetime.now().isoformat(),
-            'type': change_type,
-            'description': description
-        }
-        self.version_history.append(change)
-        self._save_history()
-        
-    def _save_history(self):
-        with open('version_control/history.json', 'w') as f:
-            json.dump(self.version_history, f, indent=4)
+    def __init__(self, version_dir: str = 'version_control'):
+        self.version_dir = Path(version_dir)
+        self.version_dir.mkdir(exist_ok=True)
+        self.setup_logging()
+    
+    def setup_logging(self):
+        logging.basicConfig(
+            filename=f'logs/version_control_{datetime.now():%Y%m%d}.log',
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+    
+    def save_version(self, post_id: str, content: dict, version: str) -> None:
+        """Save a version of content to version control"""
+        try:
+            version_file = self.version_dir / f"{post_id}_{version}.json"
+            content['version'] = version
+            content['timestamp'] = datetime.now().isoformat()
+            
+            with open(version_file, "w") as f:
+                json.dump(content, f, indent=4)
+            
+            logging.info(f"Saved version {version} for post {post_id}")
+        except Exception as e:
+            logging.error(f"Failed to save version: {str(e)}")
+            raise
+    
+    def get_version(self, post_id: str, version: str) -> dict:
+        """Retrieve a specific version of content"""
+        try:
+            version_file = self.version_dir / f"{post_id}_{version}.json"
+            with open(version_file, "r") as f:
+                return json.load(f)
+        except Exception as e:
+            logging.error(f"Failed to retrieve version: {str(e)}")
+            raise

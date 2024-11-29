@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 25 21:39:45 2024
+Created on Fri Nov 29 02:10:45 2024
 
 @author: thesaint
 """
@@ -10,9 +10,11 @@ Created on Mon Nov 25 21:39:45 2024
 from typing import Dict, List
 import asyncio
 import logging
+import json
+import pandas as pd
 from datetime import datetime
 from pathlib import Path
-from src.content_generator import ContentGenerator
+from src.content_generator import EnhancedContentGenerator
 from src.image_handler import ImageHandler
 from src.wordpress_poster import WordPressPoster
 from src.content_quality import ContentQualityAnalyzer
@@ -20,7 +22,7 @@ from src.content_quality import ContentQualityAnalyzer
 class AutomationManager:
     def __init__(self, config_manager):
         self.config = config_manager
-        self.content_generator = ContentGenerator(config_manager)
+        self.content_generator = EnhancedContentGenerator(config_manager)
         self.image_handler = ImageHandler(config_manager)
         self.wordpress_poster = WordPressPoster(config_manager)
         self.quality_analyzer = ContentQualityAnalyzer()
@@ -28,12 +30,26 @@ class AutomationManager:
         self.setup_logging()
         
     def setup_logging(self):
+        log_dir = Path('logs')
+        log_dir.mkdir(exist_ok=True)
         logging.basicConfig(
-            filename=f'logs/automation_manager_{datetime.now():%Y%m%d}.log',
+            filename=log_dir / f'automation_manager_{datetime.now():%Y%m%d}.log',
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s'
         )
         
+    def _read_input_file(self, input_file: str) -> List[Dict]:
+        """Read and parse the input file containing topics."""
+        try:
+            if input_file.endswith('.csv'):
+                df = pd.read_csv(input_file)
+                return df.to_dict('records')
+            else:
+                raise ValueError(f"Unsupported file format: {input_file}")
+        except Exception as e:
+            logging.error(f"Failed to read input file: {str(e)}")
+            raise
+            
     async def process_batch(self, input_file: str) -> None:
         try:
             topics = self._read_input_file(input_file)
@@ -55,9 +71,9 @@ class AutomationManager:
                 topic_data['topic'],
                 {
                     'primary': topic_data['primary_keywords'],
-                    'secondary': topic_data['additional_keywords'],
-                    'audience': topic_data['target_audience'],
-                    'tone': topic_data['tone']
+                    'secondary': topic_data.get('additional_keywords', []),
+                    'audience': topic_data.get('target_audience', 'general'),
+                    'tone': topic_data.get('tone', 'professional')
                 }
             )
             
@@ -117,6 +133,16 @@ class AutomationManager:
         except Exception as e:
             logging.error(f"Media processing failed: {str(e)}")
             raise
+
+    async def _fetch_relevant_video(self, topic: str, keywords: List[str]) -> Dict:
+        """Fetch relevant video for the topic."""
+        try:
+            # Implement video fetching logic here
+            # For now, return empty dict as placeholder
+            return {}
+        except Exception as e:
+            logging.error(f"Failed to fetch video: {str(e)}")
+            return {}
             
     def _meets_quality_standards(self, metrics: Dict) -> bool:
         return (
@@ -134,7 +160,7 @@ class AutomationManager:
         }
         
         history_dir = Path('data/post_history')
-        history_dir.mkdir(exist_ok=True)
+        history_dir.mkdir(exist_ok=True, parents=True)
         
-        with open(history_dir / f'post_{post_id}.json', 'w') as f:
+        with open(history_dir / f'post_{post_id}.json', 'w', encoding='utf-8') as f:
             json.dump(record, f, indent=4)
